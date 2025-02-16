@@ -1,4 +1,4 @@
-# LangGraph Code Generator
+# LangGraph Code Agent with REPL Execution 
 
 A simple implementation that uses LangGraph to generate and run Python code step by step. It demonstrates how to use LangGraph's workflow to break down a programming task into smaller steps of code generation, execution, and validation.
 
