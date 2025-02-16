@@ -2,6 +2,8 @@
 
 A simple implementation that uses LangGraph to generate and run Python code step by step. It demonstrates how to use LangGraph's workflow to break down a programming task into smaller steps of code generation, execution, and validation.
 
+![Example Run](example_run.svg)
+
 ## Quick Start
 
 1. Install dependencies:
@@ -20,10 +22,6 @@ export OPENAI_BASE_URL="your-endpoint"
 ```bash
 python langgraph_code_executor.py "What is the 105th prime number?"
 ```
-
-## Example Run
-
-![Example Run](example_run.svg)
 
 ## How It Works
 
