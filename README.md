@@ -21,6 +21,10 @@ export OPENAI_BASE_URL="your-endpoint"
 python langgraph_code_executor.py "What is the 105th prime number?"
 ```
 
+## Example Run
+
+![Example Run](example_run.svg)
+
 ## How It Works
 
 The implementation uses a basic graph-based approach with the following steps:

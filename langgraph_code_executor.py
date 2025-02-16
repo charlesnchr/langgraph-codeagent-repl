@@ -134,6 +134,15 @@ Choose 'continue' if the goal hasn't been achieved, there were errors, or more c
             }
         )
 
+        console.print(
+            Panel(
+                f"[yellow]Decision:[/yellow] {result.action}\n"
+                f"[yellow]Rationale:[/yellow] {result.rationale}",
+                title="Decision Result",
+                border_style="blue",
+            )
+        )
+
         return {"action": result.action}
 
     def generate_code(state: REPLState) -> Dict:
@@ -166,15 +175,24 @@ Code must be complete, handle errors, and include clear print statements.""",
             }
         )
 
+        console.print(
+            Panel(
+                f"[yellow]Explanation:[/yellow] {result.explanation}\n\n"
+                f"[yellow]Generated Code:[/yellow]\n{result.code}",
+                title="Generation Result",
+                border_style="yellow",
+            )
+        )
+
         return {"code_to_execute": result.code}
 
     def execute_code(state: REPLState) -> Dict:
         """Execute code in the REPL."""
         console.print(
             Panel(
-                f"Code:\n{state.code_to_execute}",
+                f"[yellow]Executing:[/yellow]\n{state.code_to_execute}",
                 title="Execution",
-                border_style="yellow",
+                border_style="green",
             )
         )
 
@@ -201,12 +219,26 @@ Code must be complete, handle errors, and include clear print statements.""",
                 finally:
                     os.remove(temp_file_name)
 
+            console.print(
+                Panel(
+                    f"[green]Output:[/green]\n{result}",
+                    title="Execution Result",
+                    border_style="green",
+                )
+            )
             return {
                 "last_execution_result": result,
                 "code_history": state.code_history + [state.code_to_execute],
                 "error": None,
             }
         except Exception as e:
+            console.print(
+                Panel(
+                    f"[red]Error:[/red]\n{str(e)}",
+                    title="Execution Failed",
+                    border_style="red",
+                )
+            )
             return {
                 "last_execution_result": None,
                 "code_history": state.code_history + [state.code_to_execute],
@@ -254,6 +286,15 @@ Final Result: {final_result}""",
             }
         )
 
+        console.print(
+            Panel(
+                f"[yellow]Answer:[/yellow] {result.answer}\n\n"
+                f"[yellow]Explanation:[/yellow] {result.explanation}",
+                title="Final Result",
+                border_style="purple",
+            )
+        )
+
         return {"final_answer": result.answer}
 
     # Add nodes and edges
@@ -277,7 +318,12 @@ Final Result: {final_result}""",
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Execute a coding task using LangGraph")
-    parser.add_argument("goal", help="The programming task to execute")
+    parser.add_argument(
+        "goal", 
+        nargs='?',
+        default="Calculate the square root of 1.578",
+        help="The programming task to execute"
+    )
     args = parser.parse_args()
     
     console.print(
@@ -288,17 +334,4 @@ if __name__ == "__main__":
     # Save the graph figure
     get_graph_figure(graph, "workflow_graph.png")
 
-    result = graph.invoke(REPLState(goal=args.goal).dict())
-
-    console.print(
-        Panel(
-            "[bold blue]Execution Summary[/bold blue]\n\n"
-            + "\n".join(
-                f"Step {i + 1}:\n{code}"
-                for i, code in enumerate(result["code_history"])
-            )
-            + f"\n\n[green]Answer:[/green] {result['final_answer']}",
-            title="Complete",
-            border_style="blue",
-        )
-    )
+    result = graph.invoke(REPLState(goal=args.goal))
