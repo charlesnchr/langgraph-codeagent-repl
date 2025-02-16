@@ -1,0 +1,5 @@
+langgraph>=0.2.0
+langchain-openai>=0.3.0
+langchain-experimental>=0.3.0
+rich>=13.9.0
+pydantic>=2.9.0
